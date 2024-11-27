@@ -1,3 +1,5 @@
+using WebStore.Data.Contexts;
+
 namespace WebStore
 {
     public class Program
@@ -8,6 +10,9 @@ namespace WebStore
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddDbContext<ApplicationDbContext>(options => {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("Cs"));
+            });
 
             var app = builder.Build();
 
