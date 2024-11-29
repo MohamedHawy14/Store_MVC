@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Models.Models;
 using WebStore.Data.Contexts;
-using WebStore.Models;
+using Models.Models;
 
 namespace WebStore.Controllers
 {

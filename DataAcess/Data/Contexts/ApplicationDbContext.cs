@@ -1,4 +1,6 @@
-﻿using WebStore.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using Models.Models;
+
 
 namespace WebStore.Data.Contexts
 {

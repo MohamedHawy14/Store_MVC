@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using WebStore.Models;
-
+using Models.Models;
 namespace WebStore.Controllers
 {
     public class HomeController : Controller

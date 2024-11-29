@@ -1,4 +1,6 @@
-﻿namespace WebStore.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Models.Models
 {
     public class Category
     {
