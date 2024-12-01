@@ -1,3 +1,5 @@
+using DataAcess.Repository;
+using DataAcess.Repository.IReository;
 using WebStore.Data.Contexts;
 
 namespace WebStore
@@ -13,6 +15,7 @@ namespace WebStore
             builder.Services.AddDbContext<ApplicationDbContext>(options => {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("Cs"));
             });
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             var app = builder.Build();
 
@@ -33,7 +36,7 @@ namespace WebStore
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}");
 
             app.Run();
         }

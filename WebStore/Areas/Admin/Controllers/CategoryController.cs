@@ -2,20 +2,21 @@
 using Models.Models;
 using WebStore.Data.Contexts;
 using Models.Models;
+using DataAcess.Repository.IReository;
 
-namespace WebStore.Controllers
+namespace WebStore.Areas.Admin.Controllers
 {
     public class CategoryController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public CategoryController(ApplicationDbContext context)
+        public CategoryController(IUnitOfWork unitOfWork)
         {
-            this._context = context;
+            _unitOfWork = unitOfWork;
         }
         public IActionResult Index()
         {
-            var Categories = _context.Categories.ToList();
+            var Categories = _unitOfWork.category.GetAll().ToList();
             return View(Categories);
         }
         public IActionResult Create()
@@ -25,14 +26,14 @@ namespace WebStore.Controllers
         [HttpPost]
         public IActionResult Create(Category category)
         {
-            if(category.Name == category.DisplayOrder.ToString())
+            if (category.Name == category.DisplayOrder.ToString())
             {
                 ModelState.AddModelError("name", "Name $ Display Order Musn't Be Same Value");
             }
             if (ModelState.IsValid)
             {
-                _context.Categories.Add(category);
-                _context.SaveChanges();
+                _unitOfWork.category.Add(category);
+                _unitOfWork.Save();
                 TempData["success"] = "Category Created Sucessfully";
                 return RedirectToAction(nameof(Index));
             }
@@ -40,11 +41,11 @@ namespace WebStore.Controllers
         }
         public IActionResult Edit(int? id)
         {
-            if(id is null || id == 0)
+            if (id is null || id == 0)
             {
                 return NotFound();
             }
-            var Category = _context.Categories.Find(id);
+            var Category = _unitOfWork.category.Get(e => e.Id == id);
             if (Category == null)
                 return NotFound();
             return View(Category);
@@ -53,8 +54,8 @@ namespace WebStore.Controllers
         public IActionResult Edit(Category category)
         {
             if (category is null || category.Name == null) return NotFound();
-            _context.Categories.Update(category);
-            _context.SaveChanges();
+            _unitOfWork.category.Update(category);
+            _unitOfWork.Save();
             TempData["success"] = "Category Updated Sucessfully";
             return RedirectToAction(nameof(Index));
         }
@@ -64,21 +65,21 @@ namespace WebStore.Controllers
             {
                 return NotFound();
             }
-            var Category = _context.Categories.Find(id);
+            var Category = _unitOfWork.category.Get(e => e.Id == id);
             if (Category == null)
                 return NotFound();
             return View(Category);
         }
-        [HttpPost,ActionName("Delete")]
+        [HttpPost, ActionName("Delete")]
         public IActionResult DeletePost(int? id)
         {
             if (id is null || id == 0)
             {
                 return NotFound();
             }
-            var category = _context.Categories.Find(id);
-            _context.Categories.Remove(category);
-            _context.SaveChanges();
+            var category = _unitOfWork.category.Get(e => e.Id == id);
+            _unitOfWork.category.Delete(category);
+            _unitOfWork.Save();
             TempData["success"] = "Category Deleted Sucessfully";
             return RedirectToAction(nameof(Index));
 
