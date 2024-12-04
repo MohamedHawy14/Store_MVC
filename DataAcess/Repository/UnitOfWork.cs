@@ -13,10 +13,15 @@ namespace DataAcess.Repository
         private readonly ApplicationDbContext _dbContext;
 
         public ICategory category { get ;private set; }
+        public IProduct product { get ;private set; }
+
+
+
         public UnitOfWork(ApplicationDbContext dbContext)
         {
             this._dbContext = dbContext;
             category = new CategoryRepository(_dbContext);
+            product = new ProductRepository(_dbContext);
         }
 
         public void Save()
