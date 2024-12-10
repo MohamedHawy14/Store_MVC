@@ -1,11 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Models.Models;
-using WebStore.Data.Contexts;
-using Models.Models;
 using DataAcess.Repository.IReository;
+using Microsoft.AspNetCore.Authorization;
+using utilities;
 
 namespace WebStore.Areas.Admin.Controllers
 {
+    [Area("Admin")]
+    [Authorize(Roles =SD.Role_Admin)]
+    
     public class CategoryController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;

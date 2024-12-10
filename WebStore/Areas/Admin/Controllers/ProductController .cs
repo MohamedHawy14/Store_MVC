@@ -1,13 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Models.Models;
-using WebStore.Data.Contexts;
-using Models.Models;
 using DataAcess.Repository.IReository;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
+using utilities;
 
 namespace WebStore.Areas.Admin.Controllers
 {
+    [Area("Admin")]
+    [Authorize(Roles = SD.Role_Admin)]
     public class ProductController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -47,9 +49,9 @@ namespace WebStore.Areas.Admin.Controllers
            
         }
         [HttpPost]
-        public IActionResult UpSert(ProductVM productVM,IFormFile? file)
+        public IActionResult UpSert(ProductVM productVM, IFormFile? file)
         {
-            
+
             if (ModelState.IsValid)
             {
                 #region ProductImage
@@ -83,7 +85,7 @@ namespace WebStore.Areas.Admin.Controllers
                 {
                     _unitOfWork.product.Update(productVM.Product);
                 }
-                
+
                 _unitOfWork.Save();
                 TempData["success"] = "Product Created Sucessfully";
                 return RedirectToAction(nameof(Index));
@@ -93,13 +95,15 @@ namespace WebStore.Areas.Admin.Controllers
 
 
                 productVM.CategoryList = _unitOfWork.category.GetAll().ToList().Select(u => new SelectListItem { Text = u.Name, Value = u.Id.ToString() });
-              
-                
+
+
                 return View(productVM);
             }
-           
+
         }
-       
+
+
+
         public IActionResult Delete(int? id)
         {
             if (id is null || id == 0)
