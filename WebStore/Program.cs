@@ -21,14 +21,23 @@ namespace WebStore
                 options.UseSqlServer(builder.Configuration.GetConnectionString("Cs"));
             });
 
-            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>();
+            // Option 1: Use AddDefaultIdentity (simpler setup without roles)
+            // Uncomment the following line and remove AddIdentity if roles are not needed:
+            // builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            //     .AddEntityFrameworkStores<ApplicationDbContext>();
 
-            builder.Services.AddIdentity<IdentityUser,IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+            // Option 2: Use AddIdentity (allows for role management)
+            builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
+
+            // Configure application cookies
             builder.Services.ConfigureApplicationCookie(options => {
                 options.LoginPath = $"/Identity/Account/Login";
                 options.LogoutPath = $"/Identity/Account/Logout";
                 options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
             });
+
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<IEmailSender, EmailSender>();
             builder.Services.AddRazorPages();
@@ -39,7 +48,6 @@ namespace WebStore
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
@@ -49,6 +57,7 @@ namespace WebStore
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
+
             app.MapRazorPages();
             app.MapControllerRoute(
                 name: "default",
@@ -58,3 +67,4 @@ namespace WebStore
         }
     }
 }
+
