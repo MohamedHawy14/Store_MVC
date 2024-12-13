@@ -14,10 +14,13 @@ namespace WebStore.Data.Contexts
         }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<Company> Companies { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+        public DbSet<ShoppingCart> ShoppingCarts { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+         
             modelBuilder.Entity<Category>().HasData(
                 new Category { Id=1 ,Name = "phone", DisplayOrder = 1 },
                 new Category { Id =3, Name = "Iphone", DisplayOrder = 3 },

@@ -12,7 +12,9 @@
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  */
 @import url("https://fonts.googleapis.com/css?family=Neucha|Cabin+Sketch&display=swap");
-
+.orange-text {
+    color: orange;
+}
 .divider-text:before,
 .divider-text:after {
     color: white;

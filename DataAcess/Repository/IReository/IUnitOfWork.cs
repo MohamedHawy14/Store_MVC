@@ -10,6 +10,9 @@ namespace DataAcess.Repository.IReository
     {
         ICategory category { get;  }
         IProduct product { get; }
+        ICompany company { get; }
+        IShoppingCart shoppingCart { get; }
+        IApplicationUser applicationUser { get; }
 
         void Save();
 

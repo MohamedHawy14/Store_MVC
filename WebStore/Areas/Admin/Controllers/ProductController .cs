@@ -23,7 +23,7 @@ namespace WebStore.Areas.Admin.Controllers
         }
         public  IActionResult Index()
         {
-            List<Product> objProductList = _unitOfWork.product.GetAll(IncludeProperties: "Category").ToList();
+            List<Product> objProductList = _unitOfWork.product.GetAll(includeProperties: "Category").ToList();
 
             return View(objProductList);
         }

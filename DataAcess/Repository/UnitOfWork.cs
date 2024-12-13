@@ -14,6 +14,9 @@ namespace DataAcess.Repository
 
         public ICategory category { get ;private set; }
         public IProduct product { get ;private set; }
+        public ICompany company { get ;private set; }
+        public IShoppingCart shoppingCart { get ;private set; }
+        public IApplicationUser applicationUser { get ;private set; }
 
 
 
@@ -22,6 +25,9 @@ namespace DataAcess.Repository
             this._dbContext = dbContext;
             category = new CategoryRepository(_dbContext);
             product = new ProductRepository(_dbContext);
+            company = new CompanyRepository(_dbContext);
+            shoppingCart = new ShoppingCartRepository(_dbContext);
+            applicationUser = new ApplicationUserRepository(_dbContext);
         }
 
         public void Save()
