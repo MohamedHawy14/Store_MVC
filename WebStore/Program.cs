@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using utilities;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Stripe;
 
 namespace WebStore
 {
@@ -20,6 +21,7 @@ namespace WebStore
             builder.Services.AddDbContext<ApplicationDbContext>(options => {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("Cs"));
             });
+            builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
 
             // Option 1: Use AddDefaultIdentity (simpler setup without roles)
             // Uncomment the following line and remove AddIdentity if roles are not needed:
@@ -53,7 +55,7 @@ namespace WebStore
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+            StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe:SecretKey").Get<string>();
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();

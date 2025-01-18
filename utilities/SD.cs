@@ -12,5 +12,17 @@ namespace utilities
         public const string Role_Company = "Company";
         public const string Role_Admin = "Admin";
         public const string Role_Employee = "Employee";
-    }
+
+        public const string StatusPending = "Pending";
+        public const string StatusApproved = "Approved";
+        public const string StatusProcessing = "Processing";
+        public const string StatusShipped = "Shipped";
+        public const string StatusCanceled = "Canceled";
+        public const string StatusRefunded = "Refunded";
+        
+        public const string PaymentStatusPending = "Pending";
+        public const string PaymentStatusApproved = "Approved";
+        public const string PaymentStatusDelayed = "Approved For Delayed Payment";
+        public const string PaymentStatusRejected = "Rejected";
+	}
 }

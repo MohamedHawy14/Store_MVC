@@ -17,6 +17,8 @@ namespace DataAcess.Repository
         public ICompany company { get ;private set; }
         public IShoppingCart shoppingCart { get ;private set; }
         public IApplicationUser applicationUser { get ;private set; }
+        public IOrderHeader orderHeader { get ;private set; }
+        public IOrderDetials orderDetials { get ;private set; }
 
 
 
@@ -28,6 +30,8 @@ namespace DataAcess.Repository
             company = new CompanyRepository(_dbContext);
             shoppingCart = new ShoppingCartRepository(_dbContext);
             applicationUser = new ApplicationUserRepository(_dbContext);
+            orderHeader = new OrderHeaderRepository(_dbContext);
+            orderDetials = new OrderDetialsRepository(_dbContext);
         }
 
         public void Save()

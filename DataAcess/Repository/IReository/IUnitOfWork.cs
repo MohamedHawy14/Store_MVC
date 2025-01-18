@@ -13,6 +13,8 @@ namespace DataAcess.Repository.IReository
         ICompany company { get; }
         IShoppingCart shoppingCart { get; }
         IApplicationUser applicationUser { get; }
+        IOrderDetials orderDetials { get; }
+        IOrderHeader orderHeader { get; }
 
         void Save();
 
