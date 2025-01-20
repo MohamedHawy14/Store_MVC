@@ -88,8 +88,8 @@ namespace WebStore.Areas.Customer.Controllers
             else
             {
                 //is company
-                ShoppingCartVM.OrderHeader.OrderStatus = SD.StatusPending;
-                ShoppingCartVM.OrderHeader.PaymentStatus = SD.PaymentStatusDelayed;
+                ShoppingCartVM.OrderHeader.OrderStatus = SD.StatusShipped;
+                ShoppingCartVM.OrderHeader.PaymentStatus = SD.PaymentStatusDelayedPayment;
             }
             _unitOfWork.orderHeader.Add(ShoppingCartVM.OrderHeader);
             _unitOfWork.Save();
@@ -147,7 +147,7 @@ namespace WebStore.Areas.Customer.Controllers
 		public IActionResult OrderConfirmation(int id)
 		{
 			OrderHeader orderHeader = _unitOfWork.orderHeader.Get(u => u.Id == id, IncludeProperties: "ApplicationUser");
-            if (orderHeader.PaymentStatus != SD.PaymentStatusDelayed)
+            if (orderHeader.PaymentStatus != SD.PaymentStatusDelayedPayment)
             {
                 //this is an order by customer
 
