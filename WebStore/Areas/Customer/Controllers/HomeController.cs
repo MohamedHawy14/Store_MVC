@@ -21,6 +21,7 @@ namespace WebStore.Areas.Customer.Controllers
 
         public IActionResult Index()
         {
+            
 
             IEnumerable<Product> productList = _unitOfWork.product.GetAll(includeProperties: "Category");
             return View(productList);
@@ -67,6 +68,8 @@ namespace WebStore.Areas.Customer.Controllers
                 shoppingCart.Id = 0;
                 _unitOfWork.shoppingCart.Add(shoppingCart);
                 _unitOfWork.Save();
+                HttpContext.Session.SetInt32(SD.SessionCart,
+              _unitOfWork.shoppingCart.GetAll(u => u.ApplicationUserId == userId).Count());
             }
             TempData["success"] = "Cart updated successfully";
 

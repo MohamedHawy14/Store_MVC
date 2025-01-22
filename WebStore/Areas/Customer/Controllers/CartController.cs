@@ -160,6 +160,7 @@ namespace WebStore.Areas.Customer.Controllers
                     _unitOfWork.orderHeader.UpdateStatus(id, SD.StatusApproved, SD.PaymentStatusApproved);
                     _unitOfWork.Save();
                 }
+                HttpContext.Session.Clear();
             }
 
             List<ShoppingCart> shoppingCarts = _unitOfWork.shoppingCart
@@ -173,51 +174,48 @@ namespace WebStore.Areas.Customer.Controllers
 				return View(id);
 		}
 
-		public IActionResult Plus(int cartId)
+        public IActionResult Plus(int cartId)
         {
             var cartFromDb = _unitOfWork.shoppingCart.Get(u => u.Id == cartId);
-            if (cartFromDb != null)
-            {
-                cartFromDb.Count += 1;
-                _unitOfWork.shoppingCart.Update(cartFromDb);
-                _unitOfWork.Save();
-                TempData["success"] = "Item quantity updated successfully.";
-            }
+            cartFromDb.Count += 1;
+            _unitOfWork.shoppingCart.Update(cartFromDb);
+            _unitOfWork.Save();
             return RedirectToAction(nameof(Index));
         }
 
         public IActionResult Minus(int cartId)
         {
             var cartFromDb = _unitOfWork.shoppingCart.Get(u => u.Id == cartId);
-            if (cartFromDb != null)
+            if (cartFromDb.Count <= 1)
             {
-                if (cartFromDb.Count > 1)
-                {
-                    cartFromDb.Count -= 1;
-                    _unitOfWork.shoppingCart.Update(cartFromDb);
-                }
-                else
-                {
-                    _unitOfWork.shoppingCart.Delete(cartFromDb);
-                }
-                _unitOfWork.Save();
-                TempData["success"] = "Item quantity updated successfully.";
+                //remove that from cart
+
+                _unitOfWork.shoppingCart.Delete(cartFromDb);
+                HttpContext.Session.SetInt32(SD.SessionCart, _unitOfWork.shoppingCart
+                    .GetAll(u => u.ApplicationUserId == cartFromDb.ApplicationUserId).Count() - 1);
             }
+            else
+            {
+                cartFromDb.Count -= 1;
+                _unitOfWork.shoppingCart.Update(cartFromDb);
+            }
+
+            _unitOfWork.Save();
             return RedirectToAction(nameof(Index));
         }
 
         public IActionResult Remove(int cartId)
         {
             var cartFromDb = _unitOfWork.shoppingCart.Get(u => u.Id == cartId);
-            if (cartFromDb != null)
-            {
-                _unitOfWork.shoppingCart.Delete(cartFromDb);
-                _unitOfWork.Save();
-                TempData["success"] = "Item removed from the cart.";
-            }
+
+            _unitOfWork.shoppingCart.Delete(cartFromDb);
+
+            HttpContext.Session.SetInt32(SD.SessionCart, _unitOfWork.shoppingCart
+              .GetAll(u => u.ApplicationUserId == cartFromDb.ApplicationUserId).Count() - 1);
+            _unitOfWork.Save();
             return RedirectToAction(nameof(Index));
-        } 
-       
+        }
+
 
 
 

@@ -33,11 +33,23 @@ namespace WebStore
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
+            builder.Services.AddDistributedMemoryCache();
+            builder.Services.AddSession(options => {
+                options.IdleTimeout = TimeSpan.FromMinutes(100);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+
             // Configure application cookies
             builder.Services.ConfigureApplicationCookie(options => {
                 options.LoginPath = $"/Identity/Account/Login";
                 options.LogoutPath = $"/Identity/Account/Logout";
                 options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
+            });
+
+            builder.Services.AddAuthentication().AddFacebook(option => {
+                option.AppId = "1332297164783258";
+                option.AppSecret = "7188516148c6a6616a396f334cd51a7f";
             });
 
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -59,7 +71,7 @@ namespace WebStore
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
-
+            app.UseSession();
             app.MapRazorPages();
             app.MapControllerRoute(
                 name: "default",

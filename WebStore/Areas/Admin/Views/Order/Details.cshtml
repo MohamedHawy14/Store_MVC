@@ -111,10 +111,12 @@
                             <div class="row my-1">
                                 <div class="col-3">Carrier</div>
                                 <div class="col-9">
-                                    @if (User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_Employee)) {
-                                        <input asp-for="orderHeader.Carrier" id="carrier" name="@Model.orderHeader.Carrier" type="text" class="form-control" />
+                                    @if (User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_Employee))
+                                    {
+                                        <input asp-for="orderHeader.Carrier" id="carrier" type="text" class="form-control" />
                                     }
-                                    else {
+                                    else
+                                    {
                                         <input asp-for="orderHeader.Carrier" readonly type="text" class="form-control" />
                                     }
                                 </div>
@@ -122,10 +124,12 @@
                             <div class="row my-1">
                                 <div class="col-3">Tracking</div>
                                 <div class="col-9">
-                                    @if (User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_Employee)) {
-                                        <input asp-for="orderHeader.TrackingNumber" id="trackingNumber" name="@Model.orderHeader.TrackingNumber"  type="text" class="form-control" />
+                                    @if (User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_Employee))
+                                    {
+                                        <input asp-for="orderHeader.TrackingNumber" id="trackingNumber" type="text" class="form-control" />
                                     }
-                                    else {
+                                    else
+                                    {
                                         <input asp-for="orderHeader.TrackingNumber" readonly type="text" class="form-control" />
                                     }
                                 </div>
@@ -232,7 +236,7 @@
                                 }
                                 @if (Model.orderHeader.OrderStatus == SD.StatusInProcess)
                                 {
-                                    <button type="submit" asp-action="ShipOrder" onsubmit="return validateInput()" class="btn btn-primary form-control my-1">Ship Order</button>
+                                    <button type="submit" asp-action="ShipOrder" onclick="return validateInput()" class="btn btn-primary form-control my-1">Ship Order</button>
                                 }
 
                                 @if (Model.orderHeader.OrderStatus != SD.StatusRefunded &&
@@ -252,14 +256,11 @@
 
 
 @section Scripts {
+
     <partial name="_ValidationScriptsPartial" />
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         function validateInput() {
-            const trackingNumber = document.getElementById("trackingNumber").value;
-            const carrier = document.getElementById("carrier").value;
-
-            if (!trackingNumber) {
+            if (document.getElementById("trackingNumber").value == "") {
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
@@ -267,8 +268,7 @@
                 });
                 return false;
             }
-
-            if (!carrier) {
+            if (document.getElementById("carrier").value == "") {
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
@@ -276,8 +276,8 @@
                 });
                 return false;
             }
-
             return true;
         }
     </script>
+
 }
