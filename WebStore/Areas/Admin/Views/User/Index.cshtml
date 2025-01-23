@@ -1,0 +1,81 @@
+﻿@model List<ApplicationUser>
+
+<div class="card shadow border-0 mt-4">
+    <div class="card-header bg-secondary bg-gradient py-3">
+        <h2 class="text-white text-center">Users List</h2>
+    </div>
+    <div class="card-body p-4">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Company</th>
+                    <th>Role</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model)
+                {
+                    <tr id="userRow_@user.Id">
+                        <td>@user.Name</td>
+                        <td>@user.Email</td>
+                        <td>@user.PhoneNumber</td>
+                        <td>@user.Company?.Name</td>
+                        <td>@user.Role</td>
+                        <td>
+                            <button class="btn @((user.LockoutEnd != null && user.LockoutEnd > DateTime.Now) ? "btn-danger" : "btn-success")"
+                                    onclick="lockUnlockUser('@user.Id', this)">
+                                @if (user.LockoutEnd != null && user.LockoutEnd > DateTime.Now)
+                                {
+                                    <i class="bi bi-lock-fill"></i> @:Lock
+                                }
+                                else
+                                {
+                                    <i class="bi bi-unlock-fill"></i> @:Unlock
+                                }
+                            </button>
+                            <a asp-controller="User" asp-action="RoleManagment" asp-route-userId="@user.Id" class="btn btn-info">
+                                <i class="bi bi-pencil-square"></i> Premission
+                            </a>
+                        </td>
+                    </tr>
+                }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    function lockUnlockUser(userId, button) {
+        $.ajax({
+            url: '/Admin/User/LockUnlock',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(userId),
+            success: function (response) {
+                if (response.success) {
+                    toastr.success(response.message);
+
+                    // Toggle button text and style dynamically
+                    if ($(button).hasClass('btn-danger')) {
+                        $(button).removeClass('btn-danger').addClass('btn-success');
+                        $(button).html('<i class="bi bi-unlock-fill"></i> Unlock');
+                    } else {
+                        $(button).removeClass('btn-success').addClass('btn-danger');
+                        $(button).html('<i class="bi bi-lock-fill"></i> Lock');
+                    }
+                } else {
+                    toastr.error(response.message);
+                }
+            },
+            error: function () {
+                toastr.error('An error occurred while processing your request.');
+            }
+        });
+    }
+</script>
+

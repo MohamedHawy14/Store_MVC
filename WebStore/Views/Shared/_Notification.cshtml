@@ -14,4 +14,25 @@
         toastr.error('@TempData["error"]');
     </script>
 }
+<style>
+    /* Customize Toastr font color */
+    .toast-success .toast-message, .toast-error .toast-message {
+        color: black !important; /* Set font color to black */
+    }
+
+    /* Customize the icon color */
+    .toast-success .toast-icon, .toast-error .toast-icon {
+        color: black !important; /* Set icon color to black */
+    }
+
+    /* You can also customize the background color if needed */
+    .toast-success {
+        background-color: #28a745 !important; /* Green background for success */
+    }
+
+    .toast-error {
+        background-color: #dc3545 !important; /* Red background for error */
+    }
+</style>
+
 
