@@ -33,10 +33,11 @@ namespace DataAcess.Repository
                 ObjFromDb.ISBN = product.ISBN;
                 ObjFromDb.Author = product.Author;
                 ObjFromDb.CategoryId = product.CategoryId;
-                if (product.ImageUrl != null)
-                {
-                    ObjFromDb.ImageUrl = product.ImageUrl;
-                }
+                ObjFromDb.ProductImages = product.ProductImages;
+                //if (product.ImageUrl != null)
+                //{
+                //    ObjFromDb.ImageUrl = product.ImageUrl;
+                //}
 
             }
         }

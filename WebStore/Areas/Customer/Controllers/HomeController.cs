@@ -23,14 +23,14 @@ namespace WebStore.Areas.Customer.Controllers
         {
             
 
-            IEnumerable<Product> productList = _unitOfWork.product.GetAll(includeProperties: "Category");
+            IEnumerable<Product> productList = _unitOfWork.product.GetAll(includeProperties: "Category,ProductImages");
             return View(productList);
         }
         public IActionResult Details(int Id)
         {
             ShoppingCart shoppingCart = new()
             {
-                Product = _unitOfWork.product.Get(u => u.Id == Id, IncludeProperties: "Category"),
+                Product = _unitOfWork.product.Get(u => u.Id == Id, IncludeProperties: "Category,ProductImages"),
                 Count = 1,
                 ProductId=Id
             };

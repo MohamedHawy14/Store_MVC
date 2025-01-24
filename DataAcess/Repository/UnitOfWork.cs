@@ -19,6 +19,7 @@ namespace DataAcess.Repository
         public IApplicationUser applicationUser { get ;private set; }
         public IOrderHeader orderHeader { get ;private set; }
         public IOrderDetials orderDetials { get ;private set; }
+        public IProductImage productImage { get ;private set; }
 
 
 
@@ -32,6 +33,7 @@ namespace DataAcess.Repository
             applicationUser = new ApplicationUserRepository(_dbContext);
             orderHeader = new OrderHeaderRepository(_dbContext);
             orderDetials = new OrderDetialsRepository(_dbContext);
+            productImage = new ProductImageRepository(_dbContext);
         }
 
         public void Save()

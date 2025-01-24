@@ -15,6 +15,7 @@ namespace DataAcess.Repository.IReository
         IApplicationUser applicationUser { get; }
         IOrderDetials orderDetials { get; }
         IOrderHeader orderHeader { get; }
+        IProductImage productImage { get; }
 
         void Save();
 
