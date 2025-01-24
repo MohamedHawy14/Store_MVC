@@ -1,5 +1,6 @@
 ﻿using DataAcess.Repository.IReository;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Models.Models;
 using Models.ViewModels;
@@ -14,12 +15,15 @@ namespace WebStore.Areas.Customer.Controllers
     public class CartController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IEmailSender _emailSender;
+
         [BindProperty]
         public ShoppingCartVM ShoppingCartVM { get; set; }
 
-        public CartController(IUnitOfWork unitOfWork)
+        public CartController(IUnitOfWork unitOfWork,IEmailSender emailSender)
         {
             _unitOfWork = unitOfWork;
+            this._emailSender = emailSender;
         }
         public IActionResult Index()
         {
@@ -163,7 +167,10 @@ namespace WebStore.Areas.Customer.Controllers
                     _unitOfWork.Save();
                 }
                 HttpContext.Session.Clear();
+
             }
+            _emailSender.SendEmailAsync(orderHeader.ApplicationUser.Email, "New Order - Hawy Store",
+              $"<p>New Order Created - {orderHeader.Id}</p>");
 
             List<ShoppingCart> shoppingCarts = _unitOfWork.shoppingCart
                 .GetAll(u => u.ApplicationUserId == orderHeader.ApplicationUserId).ToList();

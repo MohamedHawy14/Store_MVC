@@ -26,7 +26,7 @@ namespace utilities
 
             var client = new SendGridClient(SendGridSecret);
 
-            var from = new EmailAddress("test@gmail.com", "Hawy");
+            var from = new EmailAddress("test@gmail.com", "Verification Email");
             var to = new EmailAddress(email);
             var message = MailHelper.CreateSingleEmail(from, to, subject, "", htmlMessage);
 

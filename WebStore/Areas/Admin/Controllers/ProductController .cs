@@ -134,6 +134,7 @@ namespace WebStore.Areas.Admin.Controllers
                 return NotFound();
             return View(Product);
         }
+
         [HttpPost, ActionName("Delete")]
         public IActionResult DeletePost(int? id)
         {
@@ -141,27 +142,52 @@ namespace WebStore.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            var Product = _unitOfWork.product.Get(e => e.Id == id);
 
-            //string productPath = @"images\products\product-" + id;
-            //string finalPath = Path.Combine(_webHostEnvironment.WebRootPath, productPath);
+            // Fetch the product from the database
+            var product = _unitOfWork.product.Get(e => e.Id == id);
+            if (product == null)
+            {
+                return NotFound();
+            }
 
-            //if (Directory.Exists(finalPath))
-            //{
-            //    string[] filePaths = Directory.GetFiles(finalPath);
-            //    foreach (string filePath in filePaths)
-            //    {
-            //        System.IO.File.Delete(filePath);
-            //    }
+            // Construct the path to the product's directory
+            string productPath = Path.Combine(_webHostEnvironment.WebRootPath, "images", "products", $"product-{id}");
 
-            //    Directory.Delete(finalPath);
-            //} // To Delete Object And His Images
-            _unitOfWork.product.Delete(Product);
-            _unitOfWork.Save();
-            TempData["success"] = "Product Deleted Sucessfully";
+            try
+            {
+                // Check if the directory exists
+                if (Directory.Exists(productPath))
+                {
+                    // Delete all files inside the directory
+                    foreach (var filePath in Directory.GetFiles(productPath))
+                    {
+                        System.IO.File.Delete(filePath);
+                    }
+
+                    // Delete the directory itself
+                    Directory.Delete(productPath);
+                }
+
+                // Remove the product from the database
+                _unitOfWork.product.Delete(product);
+                _unitOfWork.Save();
+
+                // Success message
+                TempData["success"] = "Product deleted successfully.";
+            }
+            catch (Exception ex)
+            {
+                // Log the error (use a logging framework like Serilog in a real application)
+                Console.WriteLine($"An error occurred while deleting the product or directory: {ex.Message}");
+
+                // Display error message to the user
+                TempData["error"] = "An error occurred while deleting the product. Please try again.";
+            }
+
             return RedirectToAction(nameof(Index));
-
         }
+
+       
         public IActionResult DeleteImage(int imageId)
         {
             var imageToBeDeleted = _unitOfWork.productImage.Get(u => u.Id == imageId);
